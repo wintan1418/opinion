@@ -1,0 +1,32 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @opinion %>
+
+<div class="card-body">
+  <%= link_to "Edit this opinion", edit_opinion_path(@opinion),class:"btn btn-primary" %> |
+  <%= link_to "Back to opinions", opinions_path, class:"btn btn-primary" %>
+
+  <%= button_to "Destroy this opinion", @opinion, method: :delete, class:"btn btn-danger" %>
+</div>
+
+<div class="card my-1"> 
+  <div class="card-body">
+    <p class="font-weight-bold">Comments</p>
+    <%= form_with(model: [@opinion, @opinion.comments.build]) do |f| %>
+      <div class="form-group">
+        <%= f.label 'New comment' %>
+        <%= f.text_area :body, class: 'form-control' %>
+      </div>
+      <%= f.submit 'Submit', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
+<%= render @opinion.comments %>
+ <p><%= @opinion.likes.count%> <%= (@opinion.likes.count) == 1? 'like' : "likes" %></p>
+ <% pre_like = @opinion.likes.find{|like| like.user_id == current_user.id} %>
+ <% if pre_like%>
+  <%= button_to "unlike", opinion_like_path(@opinion, pre_like), method: :delete%>
+  <%else%>
+  <%=button_to "like", opinion_likes_path(@opinion), method: :post%>
+ <%end%>
+
